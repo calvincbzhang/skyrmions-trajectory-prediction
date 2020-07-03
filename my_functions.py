@@ -8,8 +8,19 @@ from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
 
-# Show particles that will be taken into consideration on first frame
+
 def show_tracked(df, directory=''):
+    """
+    Shows particles being tracked and taken into consideration in first frame.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        The dataframe containing the skyrmions to be tracked
+    directory : str
+        The directory where the data of each simulation is stored
+    """
+
     img = cv2.imread(directory + '/m000000.png')
     radius = 10
     color = (255, 0, 0)
@@ -23,8 +34,22 @@ def show_tracked(df, directory=''):
     plt.imshow(img)
     plt.show()
 
-# Put data in frames format
+
 def get_frames(data):
+    """
+    Places data in list of frames. Each element of the list if another list
+    containing the x and y coordinates of the skyrmions present in the frame.
+
+    Parameters
+    ----------
+    data : pandas.DataFrame
+        Dataframe with columns ['y', 'x', 'frame', 'particle']
+    
+    Returns
+    -------
+    list
+        a list of lists where each element represents a frame
+    """
     frames = []
     # for each frame
     for f in tqdm(data['frame'].unique(), desc="Getting frames"):
@@ -36,8 +61,24 @@ def get_frames(data):
         frames.append(list(coordinates))
     return frames
 
-# Split in training and testing
+
 def split(df, test_size = 0.2):
+    """
+    Splits data into training and testing.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Data to be split
+    test_size: float, optional
+        Percentage of data to be used to testing (default is 0.2, i.e. 20%)
+
+    Returns
+    -------
+    list, list, list, list
+        a tuple of 4 lists: train_X, train_y, test_X, test_y
+    """
+
     # index of separation of training and testing
     last_x_pct = df.index.values[-int(test_size*max(df.index.values))]
     # testing set
@@ -51,8 +92,27 @@ def split(df, test_size = 0.2):
     # return train_X, train_y, test_X, test_y
     return train_df[first_col].tolist(), train_df[second_col].tolist(), test_df[first_col].tolist(), test_df[second_col].tolist()
 
-# Print evaluation metrics
+
 def evaluate(X, y, model):
+    """
+    Predict data given input data and evaluate against ground truth with
+    RMSE and R2.
+
+    Parameters
+    ----------
+    X : numpy.ndarray
+        Input data
+    y : numpy.ndarray
+        Ground truth
+    model : object
+        Model for prediction
+    
+    Returns
+    -------
+    numpy.ndarray
+        an array with the predicted values
+    """
+
     # predict with given model
     y_predict = model.predict(X)
     rmse = (np.sqrt(mean_squared_error(y, y_predict)))
@@ -66,6 +126,7 @@ def evaluate(X, y, model):
     return y_predict
 
 # Place predictions in dataframe
+# TODO: genralise so that it works in ever experiment
 def get_predictions_df(y_predict):
     predict_df = pd.DataFrame(columns=['x', 'y', 'frame', 'particle'])
 
@@ -78,6 +139,7 @@ def get_predictions_df(y_predict):
     return predict_df
 
 # Plot prediction
+# TODO: genelise so that it work in every experiment
 def plot_prediction(train_predict_df, test_predict_df, data, particle=0):
     plt.figure(figsize=(20, 10))
     plt.grid(True, axis='x')
