@@ -125,35 +125,101 @@ def evaluate(X, y, model):
     
     return y_predict
 
-# Place predictions in dataframe
-# TODO: genralise so that it works in ever experiment
-def get_predictions_df(y_predict):
+
+def get_predictions_df(y_predict, ids=[]):
+    """
+    Places a list of predictions in a dataframe.
+
+    Parameters
+    ----------
+    y_predict : numpy.ndarray
+        Array of predictions
+    ids : list, optional
+        List of skyrmions predicted (default=[], in this case consider all
+        skyrmions)
+
+    Returns
+    -------
+    pd.dataframe
+        a dataframe containing the predicted skyrmions
+    """
+
     predict_df = pd.DataFrame(columns=['x', 'y', 'frame', 'particle'])
 
     # for each predicted frame
     for i in tqdm(range(len(y_predict)), desc='Prediction to dataframe'):
-        # for each particle
-        for j in range(0, len(y_predict[i]), 2):
-            predict_df = predict_df.append({'x': y_predict[i][j], 'y':y_predict[i][j+1], 'frame': i, 'particle': j//2}, ignore_index=True)
-    
+        
+        if not ids:  # if no ids are given, then all particles are considered
+            for j in range(0, len(y_predict[i]), 2):
+                predict_df = predict_df.append({'x': y_predict[i][j], 'y':y_predict[i][j+1], 'frame': i, 'particle': j//2}, ignore_index=True)
+        else:  # if ids are given
+            for j, k in zip(ids, range(0, len(y_predict[i]), 2)):
+                predict_df = predict_df.append({'x': y_predict[i][k], 'y':y_predict[i][k+1], 'frame': i, 'particle': j}, ignore_index=True)
+
     return predict_df
 
-# Plot prediction
-# TODO: genelise so that it work in every experiment
-def plot_prediction(train_predict_df, test_predict_df, data, particle=0):
+# TODO: fix ids not matching with plot
+def plot_prediction(data, pred_df, train_predict_df=None, ids=[]):
+    """
+    Plots predictions, given the data for the ground truth, the prediction on
+    some set and, optionally, the prediction on the training and the ids.
+
+    Parameters:
+    ----------
+    data : pd.DataFrame
+        The dataframe containing the ground truth
+    pred_df : pd.DataFrame
+        The dataframe containing the prediction
+    train_predict_df : pandas.DataFrame, optional
+        The dataframe containing the prediction on the training set if it makes
+        for the data to be plotted with the pred_df dataframe (default is None)
+    ids : list, optional
+        A list containing the ids we want to plot (default is [], which means
+        we will plot all the particles)
+    """
     plt.figure(figsize=(20, 10))
     plt.grid(True, axis='x')
     plt.xticks(np.arange(0, max(data['x'])+1, 1000.0))
     plt.ylim(0, 200)
     # invert axis so that origin is in top left
     plt.gca().invert_yaxis()
+    
+    if not ids:
+        ids = data.particle.unique().tolist()
+    
+    for particle in ids:
+        if train_predict_df is not None:
+            # vertical line diving train and test
+            plt.axvline(x=train_predict_df[train_predict_df['particle'] == particle]['x'].iloc[-1], ymin=0, ymax=1, label='training vs testing', color='g')
+            x = pd.concat([train_predict_df[train_predict_df['particle'] == particle]['x'], pred_df[pred_df['particle'] == particle]['x']])
+            y = pd.concat([train_predict_df[train_predict_df['particle'] == particle]['y'], pred_df[pred_df['particle'] == particle]['y']])
+        else:
+            x = pred_df[pred_df['particle'] == particle]['x']
+            y = pred_df[pred_df['particle'] == particle]['y']
 
-    # vertical line diving train and test
-    plt.axvline(x=train_predict_df[train_predict_df['particle'] == particle]['x'].iloc[-1], ymin=0, ymax=1, label='training vs testing', color='g')
+        plt.plot(x, y, label='prediction', color='tab:blue')
+        plt.plot(data[data['particle'] == particle]['x'], data[data['particle'] == particle]['y'], label='ground truth', color='tab:orange')
 
-    x = pd.concat([train_predict_df[train_predict_df['particle'] == particle]['x'], test_predict_df[test_predict_df['particle'] == particle]['x']])
-    y = pd.concat([train_predict_df[train_predict_df['particle'] == particle]['y'], test_predict_df[test_predict_df['particle'] == particle]['y']])
-
-    plt.plot(x, y, label='prediction')
-    plt.plot(data[data['particle'] == particle]['x'], data[data['particle'] == particle]['y'], label='ground truth')
     plt.legend()
+
+
+def frames_to_xy(frames):
+    """
+    Given a list of frames it transforms it into two lists: X, y.
+
+    Parameters
+    ----------
+    frames : list
+        List of frames to transform
+    
+    Returns
+    -------
+    list, list
+        two lists, namely a frame list and a next_frame list
+    """
+    df = pd.DataFrame(columns=['frame', 'next_frame'])
+    
+    for i in range(1, len(frames)):
+        df = df.append({'frame': frames[i-1], 'next_frame': frames[i]}, ignore_index=True)
+    
+    return df['frame'].tolist(), df['next_frame'].tolist()
