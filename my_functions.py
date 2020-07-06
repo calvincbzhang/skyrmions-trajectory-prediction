@@ -158,7 +158,7 @@ def get_predictions_df(y_predict, ids=[]):
 
     return predict_df
 
-# TODO: fix ids not matching with plot
+
 def plot_prediction(data, pred_df, train_predict_df=None, ids=[]):
     """
     Plots predictions, given the data for the ground truth, the prediction on
@@ -197,8 +197,8 @@ def plot_prediction(data, pred_df, train_predict_df=None, ids=[]):
             x = pred_df[pred_df['particle'] == particle]['x']
             y = pred_df[pred_df['particle'] == particle]['y']
 
-        plt.plot(x, y, label='prediction', color='tab:blue')
-        plt.plot(data[data['particle'] == particle]['x'], data[data['particle'] == particle]['y'], label='ground truth', color='tab:orange')
+        plt.plot(x, y, label='prediction ' + str(particle), color='tab:blue')
+        plt.plot(data[data['particle'] == particle]['x'], data[data['particle'] == particle]['y'], label='ground truth ' + str(particle), color='tab:orange')
 
     plt.legend()
 
