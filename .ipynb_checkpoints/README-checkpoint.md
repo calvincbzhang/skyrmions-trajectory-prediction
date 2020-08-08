@@ -1,1 +1,0 @@
-# skyrmions-trajectory-prediction
