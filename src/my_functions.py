@@ -31,6 +31,7 @@ def show_tracked(df, directory=''):
         img = cv2.circle(img, (int(row['x']), int(row['y'])), radius, color, thickness) 
 
     plt.figure(figsize=(20, 10))
+    plt.title('Skyrmions taken into cosideration')
     plt.imshow(img)
     plt.show()
 
