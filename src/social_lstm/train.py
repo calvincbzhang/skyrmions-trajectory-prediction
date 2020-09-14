@@ -15,30 +15,22 @@ def main():
     # TODO: pass load arguments via config file
 
     model = SocialLSTM(pred_len=12, cell_side=4, n_side_cells=9,
-                       lstm_dim=32, emb_dim=16)
+                       lstm_dim=32, emb_dim=32)
 
     optimizer = tf.keras.optimizers.RMSprop(learning_rate=0.003)
 
     data = pd.read_csv('../../data/processed/trajectories.csv').rename({"particle": "id"}, axis=1)
 
-    min_max_scaler_x = preprocessing.MinMaxScaler()
-    min_max_scaler_y = preprocessing.MinMaxScaler()
-
-    data_scaled = data.copy()
-
-    data_scaled['x'] = min_max_scaler_x.fit_transform(np.reshape(data['x'].values.astype(float), (-1, 1)))
-    data_scaled['y'] = min_max_scaler_y.fit_transform(np.reshape(data['y'].values.astype(float), (-1, 1)))
-
     pct_idx = int(0.8 * len(data.index))
 
     # prepare datasets
     train_ds, n_train_samples = load_dataset(
-        df=data_scaled[:pct_idx],
+        df=data[:pct_idx],
         obs_len=8,
         pred_len=12)
 
     test_ds, n_test_samples = load_dataset(
-        df=data_scaled[pct_idx:],
+        df=data[pct_idx:],
         obs_len=8,
         pred_len=12)
 
