@@ -1,0 +1,26 @@
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
+\contentsline {section}{\numberline {2}The Data}{2}{section.2}%
+\contentsline {section}{\numberline {3}Regression}{3}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Experiment 1}{3}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Results}{3}{subsubsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.2}Experiment 2}{3}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Results}{5}{subsubsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.3}Experiment 3}{5}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.1}Results}{5}{subsubsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.4}Experiment 4}{6}{subsection.3.4}%
+\contentsline {subsubsection}{\numberline {3.4.1}Results}{6}{subsubsection.3.4.1}%
+\contentsline {paragraph}{Random choice of half of the skyrmions for training}{6}{section*.7}%
+\contentsline {paragraph}{Top/bottom half for training}{6}{section*.12}%
+\contentsline {paragraph}{Random choice of one third of the skyrmins for training}{10}{section*.18}%
+\contentsline {paragraph}{Top/Middle/Bottom third for training}{10}{section*.20}%
+\contentsline {section}{\numberline {4}Recurrent Neural Network}{10}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Experiment 1}{10}{subsection.4.1}%
+\contentsline {subsubsection}{\numberline {4.1.1}Results}{10}{subsubsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.2}Experiment 2}{11}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1}Results}{11}{subsubsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.3}Experiment 3}{12}{subsection.4.3}%
+\contentsline {subsubsection}{\numberline {4.3.1}Results}{14}{subsubsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.4}Experiment 4}{14}{subsection.4.4}%
+\contentsline {subsubsection}{\numberline {4.4.1}Results}{14}{subsubsection.4.4.1}%
+\contentsline {section}{\numberline {5}Social LSTM}{17}{section.5}%
+\contentsline {subsubsection}{\numberline {5.0.1}Results}{17}{subsubsection.5.0.1}%
